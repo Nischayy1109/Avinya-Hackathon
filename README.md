@@ -1,1 +1,1 @@
-Begin LOL LOL LOL
+Begin LOL LOL
