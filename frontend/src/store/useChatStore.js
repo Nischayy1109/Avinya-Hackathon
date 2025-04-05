@@ -10,17 +10,21 @@ export const useChatStore = create((set, get) => ({
   isUsersLoading: false,
   isMessagesLoading: false,
 
-  getUsers: async () => {
+  getUsers: async (country) => {
     set({ isUsersLoading: true });
     try {
-      const res = await axiosInstance.get("/messages/users");
+      // Construct the URL with the country parameter
+      const url = country ? `/messages/users/${country}` : "/messages/users";
+      
+      const res = await axiosInstance.get(url);
       set({ users: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "An error occurred");
     } finally {
       set({ isUsersLoading: false });
     }
   },
+  
 
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });

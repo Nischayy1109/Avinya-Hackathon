@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare, User } from "lucide-react";
 import { Link } from "react-router-dom";
-
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 
@@ -12,6 +11,7 @@ const SignUpPage = () => {
     fullName: "",
     email: "",
     password: "",
+    country: "", // Added country field
   });
 
   const { signup, isSigningUp } = useAuthStore();
@@ -22,6 +22,7 @@ const SignUpPage = () => {
     if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
     if (!formData.password) return toast.error("Password is required");
     if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (!formData.country.trim()) return toast.error("Country is required"); // Country validation
 
     return true;
   };
@@ -31,7 +32,7 @@ const SignUpPage = () => {
 
     const success = validateForm();
 
-    if (success === true) signup(formData);
+    if (success === true) signup(formData); // Pass country field in signup
   };
 
   return (
@@ -54,6 +55,7 @@ const SignUpPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Full Name Field */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Full Name</span>
@@ -72,6 +74,7 @@ const SignUpPage = () => {
               </div>
             </div>
 
+            {/* Email Field */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Email</span>
@@ -90,6 +93,7 @@ const SignUpPage = () => {
               </div>
             </div>
 
+            {/* Password Field */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Password</span>
@@ -119,6 +123,26 @@ const SignUpPage = () => {
               </div>
             </div>
 
+            {/* Country Field */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-medium">Country</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="size-5 text-base-content/40">🌍</span> {/* Optional icon */}
+                </div>
+                <input
+                  type="text"
+                  className={`input input-bordered w-full pl-10`}
+                  placeholder="Your Country"
+                  value={formData.country}
+                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
             <button type="submit" className="btn btn-primary w-full" disabled={isSigningUp}>
               {isSigningUp ? (
                 <>
@@ -143,7 +167,6 @@ const SignUpPage = () => {
       </div>
 
       {/* right side */}
-
       <AuthImagePattern
         title="Join our community"
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
@@ -151,4 +174,5 @@ const SignUpPage = () => {
     </div>
   );
 };
+
 export default SignUpPage;
